@@ -1,15 +1,23 @@
 ﻿using GemBox.Document;
+using GemBox.Spreadsheet;
+using GemBox.Spreadsheet.Charts;
+using ChartType = GemBox.Document.ChartType;
+using DocumentLengthUnit = GemBox.Document.LengthUnit;
 
 namespace Lab.Package.GemBox
 {
     public class Document
     {
-        private const string LicenseKey = "FREE-LIMITED-KEY";
+        private const string DocumentLicenseKey = "FREE-LIMITED-KEY";
+        private const string SpreadsheetLicenseKey = "FREE-LIMITED-KEY";
 
         public Document()
         {
-            // If using the Professional version, put your serial key below.
-            ComponentInfo.SetLicense(LicenseKey);
+            // If using the Professional version, put your GemBox.Document serial key below.
+            ComponentInfo.SetLicense(DocumentLicenseKey);
+
+            // If using the Professional version, put your GemBox.Spreadsheet serial key below.
+            SpreadsheetInfo.SetLicense(SpreadsheetLicenseKey);
         }
 
         public void HelloWorld()
@@ -72,6 +80,48 @@ namespace Lab.Package.GemBox
                     writer.WriteLine();
                 }
             }
+        }
+
+        public void CreateChart()
+        {
+            // 1. 建立 DocumentModel
+            // TODO：實作備註
+
+            var document = new DocumentModel();
+
+            // Create Word chart and add it to document.
+            var chart = new Chart(document, ChartType.Bar,
+                new FloatingLayout(
+                    new HorizontalPosition(HorizontalPositionType.Center, HorizontalPositionAnchor.Margin),
+                    new VerticalPosition(VerticalPositionType.Top, VerticalPositionAnchor.Paragraph),
+                    new Size(14, 7, DocumentLengthUnit.Centimeter)));
+
+            document.Sections.Add(
+                new Section(document,
+                    new Paragraph(document, "New document with chart element."),
+                    new Paragraph(document, chart)));
+
+            // Get underlying Excel chart.
+            ExcelChart excelChart = (ExcelChart)chart.ExcelChart;
+            ExcelWorksheet worksheet = excelChart.Worksheet;
+
+            // Add data for Excel chart.
+            worksheet.Cells["A1"].Value = "Name";
+            worksheet.Cells["A2"].Value = "John Doe";
+            worksheet.Cells["A3"].Value = "Fred Nurk";
+            worksheet.Cells["A4"].Value = "Hans Meier";
+            worksheet.Cells["A5"].Value = "Ivan Horvat";
+
+            worksheet.Cells["B1"].Value = "Salary";
+            worksheet.Cells["B2"].Value = 3600;
+            worksheet.Cells["B3"].Value = 2580;
+            worksheet.Cells["B4"].Value = 3200;
+            worksheet.Cells["B5"].Value = 4100;
+
+            // Select data.
+            excelChart.SelectData(worksheet.Cells.GetSubrange("A1:B5"), true);
+
+            document.Save("Created Chart.docx");
         }
     }
 }

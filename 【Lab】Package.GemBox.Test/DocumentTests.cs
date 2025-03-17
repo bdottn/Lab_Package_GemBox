@@ -17,5 +17,13 @@ namespace Lab.Package.GemBox.Test
 
             document.Reading();
         }
+
+        [Fact]
+        public void CreateChart_Test()
+        {
+            var document = new Document();
+
+            document.CreateChart();
+        }
     }
 }
