@@ -9,5 +9,13 @@ namespace Lab.Package.GemBox.Test
 
             document.HelloWorld();
         }
+
+        [Fact]
+        public void Reading_Test()
+        {
+            var document = new Document();
+
+            document.Reading();
+        }
     }
 }
