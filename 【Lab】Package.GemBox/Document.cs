@@ -2,7 +2,7 @@
 
 namespace Lab.Package.GemBox
 {
-    class Document
+    public class Document
     {
         private const string LicenseKey = "FREE-LIMITED-KEY";
 
